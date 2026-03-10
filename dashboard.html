@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REXOBITCC | Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: { darkbg: '#0f172a', cardbg: '#1e293b' }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .glass-effect { background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(12px); }
+    </style>
+</head>
+<body class="bg-darkbg text-slate-300 min-h-screen flex relative overflow-x-hidden">
+
+    <div class="fixed top-[-10%] left-[-10%] w-96 h-96 bg-cyan-600/20 rounded-full blur-[100px] pointer-events-none z-0"></div>
+
+    <aside class="hidden md:flex flex-col w-64 glass-effect border-r border-slate-800 h-screen sticky top-0 z-20">
+        <div class="p-6 text-center border-b border-slate-800">
+            <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 tracking-wider">REXOBITCC</h1>
+        </div>
+        <nav class="flex-1 p-4 space-y-2 mt-4">
+            <a href="dashboard.html" class="flex items-center gap-3 bg-gradient-to-r from-cyan-500/20 to-blue-500/10 text-cyan-400 px-4 py-3 rounded-xl font-medium border border-cyan-500/30 transition">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="payment.html" class="flex items-center gap-3 hover:bg-slate-800 px-4 py-3 rounded-xl font-medium text-slate-300 transition">
+                <i class="fas fa-wallet"></i> Add Payment
+            </a>
+            <a href="#" class="flex items-center gap-3 hover:bg-slate-800 px-4 py-3 rounded-xl font-medium text-slate-300 transition">
+                <i class="fas fa-user"></i> Profile
+            </a>
+            <a href="#" class="flex items-center gap-3 hover:bg-slate-800 px-4 py-3 rounded-xl font-medium text-slate-300 transition">
+                <i class="fas fa-headset"></i> Support
+            </a>
+        </nav>
+        <div class="p-4 border-t border-slate-800">
+            <a href="login.html" class="w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-red-500/20 text-red-400 hover:text-red-500 px-4 py-3 rounded-xl transition">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-1 p-4 md:p-8 pb-24 md:pb-8 w-full max-w-7xl mx-auto relative z-10">
+        
+        <header class="flex justify-between items-center mb-8">
+            <div class="md:hidden text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">REXOBITCC</div>
+            <div class="flex items-center gap-4 ml-auto">
+                <div class="bg-cardbg border border-slate-700 px-4 py-2 rounded-full flex items-center gap-2 shadow-lg">
+                    <i class="fas fa-wallet text-cyan-400"></i>
+                    <span class="font-semibold text-white">₹2,500</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="bg-gradient-to-r from-cyan-600 to-blue-700 rounded-2xl p-6 md:p-8 mb-8 shadow-lg shadow-cyan-500/20 flex justify-between items-center">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-bold text-white">Welcome back!</h2>
+                <p class="text-cyan-100 mt-2">Ready to buy premium cards today?</p>
+            </div>
+            <a href="payment.html" class="hidden md:inline-block bg-white text-blue-700 font-bold px-6 py-3 rounded-xl hover:shadow-lg transition">
+                + Add Funds
+            </a>
+        </div>
+
+        <h3 class="text-xl font-bold text-white mb-6"><i class="fas fa-store text-cyan-400 mr-2"></i> Premium Cards Store</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <div class="bg-cardbg border border-slate-700 rounded-2xl p-5 shadow-lg group hover:border-cyan-500/50 transition duration-300">
+                <div class="h-32 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 mb-4 flex items-center justify-center relative overflow-hidden">
+                    <div class="absolute top-2 right-2 bg-black/40 text-xs px-2 py-1 rounded-md text-white border border-white/20">In Stock</div>
+                    <i class="fas fa-gem text-5xl text-white/50 group-hover:scale-110 transition"></i>
+                </div>
+                <h4 class="text-lg font-bold text-white mb-1">VIP Card</h4>
+                <div class="flex justify-between items-center text-sm mb-4">
+                    <span class="text-slate-400">Card Balance:</span>
+                    <span class="text-emerald-400 font-semibold">₹5,000</span>
+                </div>
+                <div class="flex justify-between items-center border-t border-slate-700 pt-4 mt-2">
+                    <div>
+                        <p class="text-xs text-slate-400">Price</p>
+                        <p class="text-xl font-bold text-white">₹450</p>
+                    </div>
+                    <button onclick="buyCard('VIP Card', 450)" class="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-5 py-2 rounded-xl font-semibold hover:shadow-lg transition">
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-cardbg border border-slate-700 rounded-2xl p-5 shadow-lg group hover:border-emerald-500/50 transition duration-300">
+                <div class="h-32 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 mb-4 flex items-center justify-center relative overflow-hidden">
+                    <div class="absolute top-2 right-2 bg-black/40 text-xs px-2 py-1 rounded-md text-white border border-white/20">In Stock</div>
+                    <i class="fas fa-bolt text-5xl text-white/50 group-hover:scale-110 transition"></i>
+                </div>
+                <h4 class="text-lg font-bold text-white mb-1">Standard Card</h4>
+                <div class="flex justify-between items-center text-sm mb-4">
+                    <span class="text-slate-400">Card Balance:</span>
+                    <span class="text-emerald-400 font-semibold">₹2,000</span>
+                </div>
+                <div class="flex justify-between items-center border-t border-slate-700 pt-4 mt-2">
+                    <div>
+                        <p class="text-xs text-slate-400">Price</p>
+                        <p class="text-xl font-bold text-white">₹180</p>
+                    </div>
+                    <button onclick="buyCard('Standard Card', 180)" class="bg-slate-700 hover:bg-emerald-600 text-white px-5 py-2 rounded-xl font-semibold transition">
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div class="md:hidden fixed bottom-0 w-full glass-effect border-t border-slate-800 flex justify-around p-3 pb-4 z-50">
+        <a href="dashboard.html" class="text-cyan-400 flex flex-col items-center gap-1 transition scale-110">
+            <i class="fas fa-home text-xl"></i><span class="text-[10px]">Home</span>
+        </a>
+        <a href="payment.html" class="text-slate-400 hover:text-cyan-400 flex flex-col items-center gap-1 transition">
+            <i class="fas fa-wallet text-xl"></i><span class="text-[10px]">Add Fund</span>
+        </a>
+        <a href="#" class="text-slate-400 hover:text-cyan-400 flex flex-col items-center gap-1 transition">
+            <i class="fas fa-user text-xl"></i><span class="text-[10px]">Profile</span>
+        </a>
+        <a href="login.html" class="text-red-400 flex flex-col items-center gap-1 transition">
+            <i class="fas fa-sign-out-alt text-xl"></i><span class="text-[10px]">Logout</span>
+        </a>
+    </div>
+
+    <script>
+        function buyCard(cardName, price) {
+            const confirmBuy = confirm(`Do you want to buy ${cardName} for ₹${price}?`);
+            if(confirmBuy) {
+                alert(`Success! You have purchased the ${cardName}. Admin will process it shortly.`);
+                // Here later you can add actual logic to deduct balance
+            }
+        }
+    </script>
+</body>
+</html>
