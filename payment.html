@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REXOBITCC | Add Funds</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: { darkbg: '#0f172a', cardbg: '#1e293b' }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); }
+        .input-glow:focus-within { box-shadow: 0 0 15px rgba(6, 182, 212, 0.3); border-color: #06b6d4; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-darkbg text-slate-300 min-h-screen p-4 md:p-8 flex justify-center items-start">
+
+    <div class="w-full max-w-4xl mt-4 md:mt-10 relative z-10">
+        
+        <div class="flex items-center gap-4 mb-8">
+            <a href="dashboard.html" class="bg-slate-800 hover:bg-slate-700 w-10 h-10 rounded-full flex items-center justify-center transition shadow-lg shadow-black/50">
+                <i class="fas fa-arrow-left text-slate-300"></i>
+            </a>
+            <div>
+                <h2 class="text-3xl font-bold text-white tracking-wide">Add Funds</h2>
+                <p class="text-cyan-400 text-sm mt-1">Current Balance: <span class="font-bold text-white">₹2,500</span></p>
+            </div>
+        </div>
+
+        <div class="flex space-x-2 bg-slate-800/50 p-1 rounded-xl mb-6 w-full max-w-md mx-auto">
+            <button onclick="switchTab('upi')" id="btn-upi" class="flex-1 py-3 text-sm font-bold rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg transition-all duration-300">
+                <i class="fas fa-rupee-sign mr-2"></i> UPI (INR)
+            </button>
+            <button onclick="switchTab('usdt')" id="btn-usdt" class="flex-1 py-3 text-sm font-bold rounded-lg text-slate-400 hover:text-white transition-all duration-300">
+                <i class="fab fa-bitcoin mr-2"></i> USDT (TRC20)
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <div class="glass-panel border border-slate-700 rounded-3xl p-6 shadow-xl flex flex-col items-center justify-center text-center">
+                
+                <div id="content-upi" class="tab-content active w-full">
+                    <h3 class="text-xl font-bold text-white mb-4">Scan to Pay via UPI</h3>
+                    
+                    <div class="bg-white p-2 rounded-2xl inline-block mb-4 border-4 border-cyan-500 shadow-[0_0_20px_rgba(6,182,212,0.4)]">
+                        <img src="upi-qr.jpg" alt="Upload upi-qr.jpg to GitHub" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=UPI_QR_NOT_UPLOADED'" class="w-48 h-48 rounded-xl">
+                    </div>
+                    
+                    <p class="text-xs text-slate-400 mt-2"><i class="fas fa-info-circle text-cyan-500 mr-1"></i> Minimum deposit: ₹100. Scan the QR code using any UPI app.</p>
+                </div>
+
+                <div id="content-usdt" class="tab-content w-full">
+                    <h3 class="text-xl font-bold text-white mb-4">Send USDT</h3>
+                    
+                    <div class="bg-white p-2 rounded-2xl inline-block mb-4 border-4 border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.4)]">
+                        <img src="usdt-qr.jpg" alt="Upload usdt-qr.jpg to GitHub" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0x106f4Be21ae420f7F504b416BD14Af25f4b27a5a'" class="w-48 h-48 rounded-xl">
+                    </div>
+                    
+                    <div class="bg-slate-800 border border-slate-700 rounded-xl p-3 mb-2 flex flex-col w-full text-left">
+                        <span class="text-slate-400 text-xs mb-1">USDT Address:</span>
+                        <div class="flex justify-between items-center">
+                            <span class="text-blue-400 font-mono text-sm truncate w-4/5" id="usdt-address">0x106f4Be21ae420f7F504b416BD14Af25f4b27a5a</span>
+                            
+                            <button onclick="copyAddress()" class="w-8 h-8 rounded-lg bg-slate-700 hover:bg-blue-600 flex items-center justify-center text-white transition shadow">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-xs text-red-400 mt-2"><i class="fas fa-exclamation-triangle mr-1"></i> Ensure you are sending to the correct network.</p>
+                </div>
+
+            </div>
+
+            <div class="glass-panel border border-slate-700 rounded-3xl p-6 shadow-xl flex flex-col justify-center">
+                <h3 class="text-xl font-bold text-white mb-6 border-b border-slate-700 pb-3">Submit Payment Details</h3>
+                
+                <form onsubmit="submitPayment(event)" class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-400 mb-1 ml-1">Amount Sent</label>
+                        <div class="relative input-glow rounded-xl border border-slate-700 bg-slate-800/50 overflow-hidden">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i class="fas fa-wallet text-slate-400"></i></div>
+                            <input type="number" id="pay-amount" placeholder="E.g. 500" class="w-full pl-11 pr-4 py-3 bg-transparent text-white focus:outline-none" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label id="label-txid" class="block text-sm font-medium text-slate-400 mb-1 ml-1">12-Digit UTR No.</label>
+                        <div class="relative input-glow rounded-xl border border-slate-700 bg-slate-800/50 overflow-hidden">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i class="fas fa-hashtag text-slate-400"></i></div>
+                            <input type="text" id="pay-utr" placeholder="Enter UTR or Hash" class="w-full pl-11 pr-4 py-3 bg-transparent text-white focus:outline-none" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-lg py-3 rounded-xl mt-4 hover:shadow-lg hover:shadow-emerald-500/40 transform hover:-translate-y-0.5 transition-all">
+                        <i class="fas fa-check-circle mr-2"></i> Submit Request
+                    </button>
+                </form>
+
+                <div class="mt-4 p-3 rounded-xl bg-blue-900/30 border border-blue-800/50 text-xs text-blue-300">
+                    <i class="fas fa-clock mr-1"></i> Your request will be sent to the admin for verification.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let currentMethod = 'UPI';
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            
+            if(tab === 'upi') {
+                currentMethod = 'UPI';
+                document.getElementById('content-upi').classList.add('active');
+                document.getElementById('btn-upi').className = "flex-1 py-3 text-sm font-bold rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg transition-all duration-300";
+                document.getElementById('btn-usdt').className = "flex-1 py-3 text-sm font-bold rounded-lg text-slate-400 hover:text-white transition-all duration-300";
+                document.getElementById('label-txid').innerText = "12-Digit UTR No.";
+            } else {
+                currentMethod = 'USDT';
+                document.getElementById('content-usdt').classList.add('active');
+                document.getElementById('btn-usdt').className = "flex-1 py-3 text-sm font-bold rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg transition-all duration-300";
+                document.getElementById('btn-upi').className = "flex-1 py-3 text-sm font-bold rounded-lg text-slate-400 hover:text-white transition-all duration-300";
+                document.getElementById('label-txid').innerText = "USDT Transaction Hash (TxID)";
+            }
+        }
+
+        // Copy Address Function
+        function copyAddress() {
+            const textToCopy = document.getElementById("usdt-address").innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert("USDT Address Copied: " + textToCopy);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+
+        // Dummy Submit Function
+        function submitPayment(e) {
+            e.preventDefault();
+            const amount = document.getElementById("pay-amount").value;
+            const utr = document.getElementById("pay-utr").value;
+            alert(`Payment Request Sent!\nMethod: ${currentMethod}\nAmount: ${amount}\nUTR/TxID: ${utr}`);
+            document.getElementById("pay-amount").value = "";
+            document.getElementById("pay-utr").value = "";
+        }
+    </script>
+</body>
+</html>
