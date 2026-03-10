@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REXOBITCC | Login</title>
+    <title>REXOBITCC | Login & Signup</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -31,82 +31,153 @@
         
         <div class="text-center mb-8">
             <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 tracking-wider mb-2">REXOBITCC</h1>
-            <p class="text-slate-400 text-sm">Welcome back! Please login to your account.</p>
+            <p id="form-subtitle" class="text-slate-400 text-sm">Welcome back! Please login to your account.</p>
         </div>
 
-        <form onsubmit="handleLogin(event)" class="space-y-5">
+        <form id="auth-form" class="space-y-5">
             
             <div>
-                <label class="block text-sm font-medium text-slate-400 mb-1 ml-1">Username</label>
+                <label class="block text-sm font-medium text-slate-400 mb-1 ml-1">Email</label>
                 <div class="relative input-glow rounded-xl transition-all duration-300 border border-slate-700 bg-slate-800/50 overflow-hidden">
-                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <i class="fas fa-user text-slate-400"></i>
-                    </div>
-                    <input type="text" id="username" placeholder="Enter your username" value="demo_user" class="w-full pl-11 pr-4 py-3 bg-transparent text-white placeholder-slate-500 focus:outline-none" required>
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i class="fas fa-envelope text-slate-400"></i></div>
+                    <input type="email" id="email" placeholder="Enter your email" class="w-full pl-11 pr-4 py-3 bg-transparent text-white placeholder-slate-500 focus:outline-none" required>
                 </div>
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-slate-400 mb-1 ml-1">Password</label>
                 <div class="relative input-glow rounded-xl transition-all duration-300 border border-slate-700 bg-slate-800/50 overflow-hidden">
-                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <i class="fas fa-lock text-slate-400"></i>
-                    </div>
-                    <input type="password" id="password" placeholder="Enter your password" value="123456" class="w-full pl-11 pr-10 py-3 bg-transparent text-white placeholder-slate-500 focus:outline-none" required>
-                    <div class="absolute inset-y-0 right-0 pr-4 flex items-center cursor-pointer hover:text-cyan-400 transition" onclick="togglePassword()">
-                        <i class="fas fa-eye text-slate-400 hover:text-cyan-400" id="eye-icon"></i>
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i class="fas fa-lock text-slate-400"></i></div>
+                    <input type="password" id="password" placeholder="Enter your password" class="w-full pl-11 pr-10 py-3 bg-transparent text-white placeholder-slate-500 focus:outline-none" required>
+                    <div class="absolute inset-y-0 right-0 pr-4 flex items-center cursor-pointer hover:text-cyan-400 transition" id="toggle-password-btn">
+                        <i class="fas fa-eye text-slate-400" id="eye-icon"></i>
                     </div>
                 </div>
             </div>
 
-            <div class="flex items-center justify-between text-sm mt-2">
-                <label class="flex items-center cursor-pointer">
-                    <input type="checkbox" class="w-4 h-4 rounded bg-slate-800 border-slate-700 text-cyan-500">
-                    <span class="ml-2 text-slate-400 hover:text-slate-300">Remember me</span>
-                </label>
-                <a href="#" class="text-cyan-400 hover:text-cyan-300 font-medium transition">Forgot Password?</a>
-            </div>
+            <p id="message-box" class="text-sm text-center hidden font-semibold"></p>
 
-            <button type="submit" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-lg py-3 rounded-xl mt-6 hover:shadow-lg hover:shadow-cyan-500/40 transform hover:-translate-y-0.5 transition-all duration-300">
+            <button type="submit" id="submit-btn" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-lg py-3 rounded-xl mt-6 hover:shadow-lg hover:shadow-cyan-500/40 transition-all duration-300">
                 Sign In
             </button>
         </form>
 
         <div class="mt-8 text-center text-sm text-slate-400 border-t border-slate-700/50 pt-6">
-            Don't have an account? 
-            <a href="#" class="text-cyan-400 hover:text-cyan-300 font-semibold transition ml-1">Create Account</a>
+            <span id="toggle-text">Don't have an account?</span> 
+            <button id="toggle-mode-btn" class="text-cyan-400 hover:text-cyan-300 font-semibold transition ml-1">Create Account</button>
         </div>
-
     </div>
 
-    <script>
-        // Redirect to dashboard on login
-        function handleLogin(event) {
-            event.preventDefault(); // Prevents page reload
-            
-            // Dummy loading effect
-            const btn = event.target.querySelector('button[type="submit"]');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
-            
-            // Redirect after 1 second to simulate processing
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 1000);
-        }
+    <script type="module">
+        // Import Firebase modules directly from CDN
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Show/Hide Password functionality
-        function togglePassword() {
+        // Your exact Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBo72hO6ccULKpOzFMRvvzfsF7D-EnEpVs",
+            authDomain: "rexobitcc-ef485.firebaseapp.com",
+            projectId: "rexobitcc-ef485",
+            storageBucket: "rexobitcc-ef485.firebasestorage.app",
+            messagingSenderId: "972573000598",
+            appId: "1:972573000598:web:a9ba9ee6da56a2949353b7"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // UI Elements
+        let isLoginMode = true;
+        const form = document.getElementById('auth-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const toggleModeBtn = document.getElementById('toggle-mode-btn');
+        const toggleText = document.getElementById('toggle-text');
+        const formSubtitle = document.getElementById('form-subtitle');
+        const msgBox = document.getElementById('message-box');
+
+        // Toggle between Login and Signup UI
+        toggleModeBtn.addEventListener('click', () => {
+            isLoginMode = !isLoginMode;
+            if(isLoginMode) {
+                formSubtitle.innerText = "Welcome back! Please login to your account.";
+                submitBtn.innerText = "Sign In";
+                toggleText.innerText = "Don't have an account?";
+                toggleModeBtn.innerText = "Create Account";
+            } else {
+                formSubtitle.innerText = "Join REXOBITCC and start buying premium cards.";
+                submitBtn.innerText = "Sign Up";
+                toggleText.innerText = "Already have an account?";
+                toggleModeBtn.innerText = "Login Here";
+            }
+            msgBox.classList.add('hidden');
+        });
+
+        // Form Submit Handler (Real Firebase Auth)
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            submitBtn.disabled = true;
+            msgBox.classList.add('hidden');
+
+            try {
+                if(isLoginMode) {
+                    // LOGIN PROCESS
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    showMessage("Login successful! Redirecting...", "text-emerald-400");
+                    setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
+                } else {
+                    // SIGNUP PROCESS
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+                    
+                    // Naya account banne par usko Database me 0 balance ke sath save karo
+                    await setDoc(doc(db, "users", user.uid), {
+                        email: user.email,
+                        balance: 0,
+                        role: "user",
+                        createdAt: new Date()
+                    });
+                    
+                    showMessage("Account created! Redirecting...", "text-emerald-400");
+                    setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
+                }
+            } catch (error) {
+                // Show Error
+                console.error(error);
+                let errorMessage = "An error occurred.";
+                if(error.code === 'auth/invalid-credential') errorMessage = "Wrong email or password.";
+                if(error.code === 'auth/email-already-in-use') errorMessage = "Email is already registered.";
+                if(error.code === 'auth/weak-password') errorMessage = "Password should be at least 6 characters.";
+                
+                showMessage(errorMessage, "text-red-400");
+                submitBtn.innerText = isLoginMode ? "Sign In" : "Sign Up";
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Show password feature
+        document.getElementById('toggle-password-btn').addEventListener('click', () => {
             const pwdInput = document.getElementById("password");
             const eyeIcon = document.getElementById("eye-icon");
             if (pwdInput.type === "password") {
                 pwdInput.type = "text";
-                eyeIcon.classList.remove("fa-eye");
-                eyeIcon.classList.add("fa-eye-slash");
+                eyeIcon.className = "fas fa-eye-slash text-cyan-400";
             } else {
                 pwdInput.type = "password";
-                eyeIcon.classList.remove("fa-eye-slash");
-                eyeIcon.classList.add("fa-eye");
+                eyeIcon.className = "fas fa-eye text-slate-400";
             }
+        });
+
+        // Function to show messages
+        function showMessage(text, colorClass) {
+            msgBox.innerText = text;
+            msgBox.className = `text-sm text-center font-semibold mt-2 ${colorClass}`;
         }
     </script>
 </body>
